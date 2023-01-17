@@ -8,36 +8,12 @@
             padding-bottom: 4px;
             margin-bottom: 0px;
         }
+        #btn-add-stamp {
+            margin-left: 8px;
+        }
     </style>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-
-            /*
-            let stamps = [0.6, 0.84, 0.44, 1.4]
-            let target = 1.4;
-            let max = 1.5;
-            function subset_sum(numbers, target, max, partial=[]) {
-                let s = 0;
-                for (var p = 0; p < partial.length; p++) {
-                    s += partial[p];
-                }
-                if (s >= target && s <= max) {
-                    console.log(`sum(${partial})=${target}`);
-                }
-                if (s >= max) {
-                    return 0;
-                }
-                for (var i = 0; i < numbers.length; i++) {
-                    let n = numbers[i];
-                    let remaining = numbers.slice(i+1, numbers.length);
-                    let newPartial = partial;
-                    newPartial.push(n);
-                    subset_sum(remaining, target, max, newPartial);
-                }
-            }
-            subset_sum(stamps, target, max);
-            */
-
 
             // let stamps = [];
             let stampFields = 1;
@@ -90,7 +66,7 @@
                     postedResults.push(`${results[i].size}-${results[i].price}-${results[i].overage}`)
 
                     let stampHeader = document.createElement("h3");
-                    stampHeader.innerText = `With ${results[i].size.toString()} Stamp(s)`;
+                    stampHeader.innerText = `Using ${results[i].size.toString()} Stamp(s)`;
                     let lineBr = document.createElement("br");
                     if (i !== 0) {
                         if (results[i].size > results[i-1].size) {
@@ -104,7 +80,7 @@
 
                     for (var j = 0; j < results[i].stamps.length; j++) {
                         let newStamps = document.createElement("h4");
-                        newStamps.innerText = `$${results[i].price.toFixed(2)} - ${results[i].stamps[j].stampName} ($${results[i].stamps[j].stampVal.toString()})`;
+                        newStamps.innerText = `$${results[i].price.toFixed(2)} - ${results[i].stamps[j].stampName} ($${results[i].stamps[j].stampVal.toFixed(2)})`;
                         newStamps.style.paddingLeft = "35px";
                         stampCalculationsField.appendChild(newStamps);
                     }
@@ -196,7 +172,7 @@
         <div style="width:50%;float:left;">
             <h3>Stamp Calculator</h3>
             <br/>
-            <h4 class="input-header">Price of International Stamp:</h4>
+            <h4 class="input-header">Price You Want Your Stamps to Add Up To:</h4>
             <div>
                 <input placeholder="1.40" type="text" id="international-stamp" />
             </div>
@@ -213,15 +189,14 @@
             <br/>
 
             <span style="font-size: large;" class="input-header">Stamps:</span>
-            <!-- <button id="btn-add-stamp">Add Another Stamp</button> -->
             <br/>
             <input placeholder="0.44 Postcard" type="text" id="stamp-field1" />
+            <button id="btn-add-stamp">Add Another Stamp</button>
             <br/><br/>
             <div id="stamp-fields">
             </div>
 
             <br/><br/>
-            <button id="btn-add-stamp">Add Another Stamp</button>
             <br/><br/>
             <button id="btn-calc">Calculate</button>
         </div>
