@@ -5,12 +5,40 @@
     </head>
     <style>
         .input-header {
-            padding-bottom:0px;
-            margin-bottom:0px;
+            padding-bottom: 4px;
+            margin-bottom: 0px;
         }
     </style>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+
+            /*
+            let stamps = [0.6, 0.84, 0.44, 1.4]
+            let target = 1.4;
+            let max = 1.5;
+            function subset_sum(numbers, target, max, partial=[]) {
+                let s = 0;
+                for (var p = 0; p < partial.length; p++) {
+                    s += partial[p];
+                }
+                if (s >= target && s <= max) {
+                    console.log(`sum(${partial})=${target}`);
+                }
+                if (s >= max) {
+                    return 0;
+                }
+                for (var i = 0; i < numbers.length; i++) {
+                    let n = numbers[i];
+                    let remaining = numbers.slice(i+1, numbers.length);
+                    let newPartial = partial;
+                    newPartial.push(n);
+                    subset_sum(remaining, target, max, newPartial);
+                }
+            }
+            subset_sum(stamps, target, max);
+            */
+
+
             // let stamps = [];
             let stampFields = 1;
             let stampFieldsDiv = document.getElementById("stamp-fields"); // div that holds stamp input fields
@@ -32,6 +60,7 @@
                 let removeStampBtn = document.createElement("button");
                 removeStampBtn.innerText = "Remove Stamp";
                 removeStampBtn.id = `stamp-remove${stampFields}`;
+                removeStampBtn.style.marginLeft = "8px";
                 removeStampBtn.onclick = function() {
                     stampFieldsDiv.removeChild(newStamp);
                     stampFieldsDiv.removeChild(removeStampBtn);
@@ -50,12 +79,18 @@
             function addCalculations(results) {
                 stampCalculationsField.innerHTML = "";
                 let header = document.createElement("h3");
-                header.innerText = "Stamp Calculations";
+                header.innerText = "Stamp Calculations:";
                 stampCalculationsField.appendChild(header);
+                let postedResults = [];
 
                 for (var i = 0; i < results.length; i++) {
+                    if (postedResults.includes(`${results[i].size}-${results[i].price}-${results[i].overage}`)) {
+                        continue;
+                    }
+                    postedResults.push(`${results[i].size}-${results[i].price}-${results[i].overage}`)
+
                     let stampHeader = document.createElement("h3");
-                    stampHeader.innerText = `With ${results[i].size.toString()} Stamp`;
+                    stampHeader.innerText = `With ${results[i].size.toString()} Stamp(s)`;
                     let lineBr = document.createElement("br");
                     if (i !== 0) {
                         if (results[i].size > results[i-1].size) {
@@ -69,7 +104,7 @@
 
                     for (var j = 0; j < results[i].stamps.length; j++) {
                         let newStamps = document.createElement("h4");
-                        newStamps.innerText = `${results[i].price.toFixed(2)} - ${results[i].stamps[j].stampName} ($${results[i].stamps[j].stampVal.toString()})`;
+                        newStamps.innerText = `$${results[i].price.toFixed(2)} - ${results[i].stamps[j].stampName} ($${results[i].stamps[j].stampVal.toString()})`;
                         newStamps.style.paddingLeft = "35px";
                         stampCalculationsField.appendChild(newStamps);
                     }
@@ -87,8 +122,10 @@
                 for (var i = 0; i < stampFields; i++) {
                     let stamp = document.getElementById(`stamp-field${i+1}`);
                     if (stamp) {
-                        let stampVal = parseFloat(stamp.value.split(' ')[0]);
-                        let stampName = stamp.value.split(' ')[1];
+                        let stampValArray = stamp.value.split(' ');
+                        let stampVal = parseFloat(stampValArray[0]);
+                        stampValArray.shift();
+                        let stampName = stampValArray.join(" ");
                         stamps.push({stampVal: stampVal, stampName: stampName });
                     }
                 }
@@ -128,6 +165,7 @@
                     for (var i = 0; i < newTrace.length; i++) {
                         price += newTrace[i].stampVal;
                     }
+                    
                     found.push({"size":newTrace.length, "price":price, overage: overage, stamps:newTrace});
                     return
                 }
@@ -138,17 +176,17 @@
                 }
 
                 for (var i = 0; i < stamps.length; i++) {
-                    if (i > 0 || !unique) {
+                    // if (i > 0 || !unique) {
                         newTrace.push(stamps[i]);
 
                         // is the stamp before this one worth exactly twice the value of this one?
                         // if so, this stamp should not occur more than once
-                        make_this_unique = i > 0 && stamps[i - 1].stampVal == stamps[i].stampVal * 2;
+                        make_this_unique = (i > 0) && (stamps[i - 1].stampVal == stamps[i].stampVal * 2);
 
                         // with the recursive call, exclude more expensive stamps; we already considered them
                         computeVals(found, newTrace, stamps.slice(-i), goalPrice - stamps[i].stampVal, maxPrice - stamps[i].stampVal, maxStamps - 1, make_this_unique)
                         newTrace.pop()
-                    }
+                    // }
                 }
                 return found;
             }
@@ -175,13 +213,15 @@
             <br/>
 
             <span style="font-size: large;" class="input-header">Stamps:</span>
-            <button id="btn-add-stamp">Add Another Stamp</button>
-            <br/><br/>
-            <input placeholder="0.60 forever" type="text" id="stamp-field1" />
+            <!-- <button id="btn-add-stamp">Add Another Stamp</button> -->
+            <br/>
+            <input placeholder="0.44 Postcard" type="text" id="stamp-field1" />
             <br/><br/>
             <div id="stamp-fields">
             </div>
 
+            <br/><br/>
+            <button id="btn-add-stamp">Add Another Stamp</button>
             <br/><br/>
             <button id="btn-calc">Calculate</button>
         </div>
