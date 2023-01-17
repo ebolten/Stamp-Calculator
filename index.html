@@ -69,7 +69,7 @@
 
                     for (var j = 0; j < results[i].stamps.length; j++) {
                         let newStamps = document.createElement("h4");
-                        newStamps.innerText = `${results[i].price} - ${results[i].stamps[j].stampName} ($${results[i].stamps[j].stampVal.toString()})`;
+                        newStamps.innerText = `${results[i].price.toFixed(2)} - ${results[i].stamps[j].stampName} ($${results[i].stamps[j].stampVal.toString()})`;
                         newStamps.style.paddingLeft = "35px";
                         stampCalculationsField.appendChild(newStamps);
                     }
