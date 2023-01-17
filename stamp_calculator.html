@@ -1,0 +1,194 @@
+<html>
+    <head>
+        <title>Stamp Calculator</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    </head>
+    <style>
+        .input-header {
+            padding-bottom:0px;
+            margin-bottom:0px;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // let stamps = [];
+            let stampFields = 1;
+            let stampFieldsDiv = document.getElementById("stamp-fields"); // div that holds stamp input fields
+            let internationalStamp = document.getElementById("international-stamp"); // international stamp cost field
+            let noPriceExceed = document.getElementById("no-price-exceed"); // price cannot exceed field
+            let maxStamps = document.getElementById("max-stamps"); // max number of stamps field
+            let stampCalculationsField = document.getElementById("stamp-calculations"); // div that holds stamp calculations
+
+            // add stamp button
+            let btnAddStamp = document.getElementById("btn-add-stamp");
+            btnAddStamp.onclick = function() {
+                let newStamp = document.createElement("input");
+                let lineBr = document.createElement("br");
+                let secondLineBr = document.createElement("br");
+                newStamp.type = "text";
+                stampFields += 1;
+                newStamp.id = `stamp-field${stampFields}`;
+
+                let removeStampBtn = document.createElement("button");
+                removeStampBtn.innerText = "Remove Stamp";
+                removeStampBtn.id = `stamp-remove${stampFields}`;
+                removeStampBtn.onclick = function() {
+                    stampFieldsDiv.removeChild(newStamp);
+                    stampFieldsDiv.removeChild(removeStampBtn);
+                    stampFieldsDiv.removeChild(lineBr);
+                    stampFieldsDiv.removeChild(secondLineBr);
+                }
+
+                // append new fields
+                stampFieldsDiv.appendChild(newStamp);
+                stampFieldsDiv.appendChild(removeStampBtn);
+                stampFieldsDiv.appendChild(lineBr);
+                stampFieldsDiv.appendChild(secondLineBr);
+            }
+
+            // add calculations to right side of page
+            function addCalculations(results) {
+                stampCalculationsField.innerHTML = "";
+                let header = document.createElement("h3");
+                header.innerText = "Stamp Calculations";
+                stampCalculationsField.appendChild(header);
+
+                for (var i = 0; i < results.length; i++) {
+                    let stampHeader = document.createElement("h3");
+                    stampHeader.innerText = `With ${results[i].size.toString()} Stamp`;
+                    let lineBr = document.createElement("br");
+                    if (i !== 0) {
+                        if (results[i].size > results[i-1].size) {
+                            stampCalculationsField.appendChild(lineBr);
+                            stampCalculationsField.appendChild(stampHeader);
+                        }
+                    } else {
+                        stampCalculationsField.appendChild(lineBr);
+                        stampCalculationsField.appendChild(stampHeader);
+                    }
+
+                    for (var j = 0; j < results[i].stamps.length; j++) {
+                        let newStamps = document.createElement("h4");
+                        newStamps.innerText = `${results[i].price} - ${results[i].stamps[j].stampName} ($${results[i].stamps[j].stampVal.toString()})`;
+                        newStamps.style.paddingLeft = "35px";
+                        stampCalculationsField.appendChild(newStamps);
+                    }
+                }
+            }
+
+            let btnCalculate = document.getElementById("btn-calc");
+            btnCalculate.onclick = function() {
+                // get necessary values
+                let internationalStampNum = parseFloat(internationalStamp.value);
+                let noPriceExceedNum = parseFloat(noPriceExceed.value);
+                let maxStampsNum = parseInt(maxStamps.value);
+                let stamps = [];
+
+                for (var i = 0; i < stampFields; i++) {
+                    let stamp = document.getElementById(`stamp-field${i+1}`);
+                    if (stamp) {
+                        let stampVal = parseFloat(stamp.value.split(' ')[0]);
+                        let stampName = stamp.value.split(' ')[1];
+                        stamps.push({stampVal: stampVal, stampName: stampName });
+                    }
+                }
+                
+                let results = computeVals([], [], stamps, internationalStampNum, noPriceExceedNum, maxStampsNum);
+                let sortedResults = sortArr(results, results.length);
+                addCalculations(sortedResults);
+            }
+
+            // An optimized version of Bubble Sort
+            function sortArr(arr, arrSize) {
+                var i, j;
+                for (i = 0; i < arrSize-1; i++) {
+                    for (j = 0; j < arrSize-i-1; j++) {
+                        if (arr[j].size > arr[j+1].size) {
+                            var temp = arr[j];
+                            arr[j] = arr[j+1];
+                            arr[j+1] = temp;
+                        }
+                    }
+                }
+                return arr;
+            }
+
+            // compute all the possible stamp outcomes
+            function computeVals(found, trace, stamps, goalPrice, maxPrice, maxStamps, unique=false) {
+                let newTrace = [...trace];
+
+                // if no max price provided
+                if (maxPrice < 0) {
+                    return 0;
+                }
+
+                if (goalPrice <= 0) {
+                    overage = -goalPrice
+                    let price = 0;
+                    for (var i = 0; i < newTrace.length; i++) {
+                        price += newTrace[i].stampVal;
+                    }
+                    found.push({"size":newTrace.length, "price":price, overage: overage, stamps:newTrace});
+                    return
+                }
+
+                // if no max stamps number was provided
+                if (maxStamps <= 0) {
+                    return 0;
+                }
+
+                for (var i = 0; i < stamps.length; i++) {
+                    if (i > 0 || !unique) {
+                        newTrace.push(stamps[i]);
+
+                        // is the stamp before this one worth exactly twice the value of this one?
+                        // if so, this stamp should not occur more than once
+                        make_this_unique = i > 0 && stamps[i - 1].stampVal == stamps[i].stampVal * 2;
+
+                        // with the recursive call, exclude more expensive stamps; we already considered them
+                        computeVals(found, newTrace, stamps.slice(-i), goalPrice - stamps[i].stampVal, maxPrice - stamps[i].stampVal, maxStamps - 1, make_this_unique)
+                        newTrace.pop()
+                    }
+                }
+                return found;
+            }
+        });
+    </script>
+    <body style="padding:45px;">
+        <div style="width:50%;float:left;">
+            <h3>Stamp Calculator</h3>
+            <br/>
+            <h4 class="input-header">Price of International Stamp:</h4>
+            <div>
+                <input placeholder="1.40" type="text" id="international-stamp" />
+            </div>
+            <br/>
+            <h4 class="input-header">Do Not Exceed the Price of:</h4>
+            <div>
+                <input placeholder="1.50" type="text" id="no-price-exceed" />
+            </div>
+            <br/>
+            <h4 class="input-header">Max Number of Stamps You Want to Use:</h4>
+            <div>
+                <input placeholder="6" type="text" id="max-stamps" />
+            </div>
+            <br/>
+
+            <span style="font-size: large;" class="input-header">Stamps:</span>
+            <button id="btn-add-stamp">Add Another Stamp</button>
+            <br/><br/>
+            <input placeholder="0.60 forever" type="text" id="stamp-field1" />
+            <br/><br/>
+            <div id="stamp-fields">
+            </div>
+
+            <br/><br/>
+            <button id="btn-calc">Calculate</button>
+        </div>
+        <div style="width:45%;float:right;">
+            <div id="stamp-calculations">
+            </div>
+        </div>
+        
+    </body>
+</html>
