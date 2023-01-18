@@ -136,14 +136,11 @@
             }
             body {
                 text-align: center;
-                /* padding: 45px; */
             }
         }
     </style>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-
-            // let stamps = [];
             let stampFields = 1;
             let stampFieldsDiv = document.getElementById("stamp-fields"); // div that holds stamp input fields
             let internationalStamp = document.getElementById("international-stamp"); // international stamp cost field
@@ -238,11 +235,6 @@
                         stampTR.appendChild(stampTDPrice);
 
                         newStampsTable.appendChild(stampTR);
-
-                        // let newStamps = document.createElement("h4");
-                        // newStamps.innerText = `$${results[i].price.toFixed(2)} - ${results[i].stamps[j].stampName} ($${results[i].stamps[j].stampVal.toFixed(2)})`;
-                        // newStamps.style.paddingLeft = "35px";
-                        // stampCalculationsField.appendChild(newStamps);
                     }
 
                     let stampTR = document.createElement("tr");
@@ -326,17 +318,15 @@
                 }
 
                 for (var i = 0; i < stamps.length; i++) {
-                    // if (i > 0 || !unique) {
-                        newTrace.push(stamps[i]);
+                    newTrace.push(stamps[i]);
 
-                        // is the stamp before this one worth exactly twice the value of this one?
-                        // if so, this stamp should not occur more than once
-                        make_this_unique = (i > 0) && (stamps[i - 1].stampVal == stamps[i].stampVal * 2);
+                    // is the stamp before this one worth exactly twice the value of this one?
+                    // if so, this stamp should not occur more than once
+                    make_this_unique = (i > 0) && (stamps[i - 1].stampVal == stamps[i].stampVal * 2);
 
-                        // with the recursive call, exclude more expensive stamps; we already considered them
-                        computeVals(found, newTrace, stamps.slice(-i), goalPrice - stamps[i].stampVal, maxPrice - stamps[i].stampVal, maxStamps - 1, make_this_unique)
-                        newTrace.pop()
-                    // }
+                    // with the recursive call, exclude more expensive stamps; we already considered them
+                    computeVals(found, newTrace, stamps.slice(-i), goalPrice - stamps[i].stampVal, maxPrice - stamps[i].stampVal, maxStamps - 1, make_this_unique)
+                    newTrace.pop()
                 }
                 return found;
             }
