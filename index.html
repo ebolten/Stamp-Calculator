@@ -2,14 +2,119 @@
     <head>
         <title>Stamp Calculator</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     </head>
     <style>
-        .input-header {
-            padding-bottom: 4px;
-            margin-bottom: 0px;
+        html {
+            scroll-behavior: smooth;
         }
-        #btn-add-stamp {
-            margin-left: 8px;
+        .btn-primary {
+            font-weight:300;
+            background: #99bbff;
+            color: black;
+            border:thin black;
+            padding:8px;
+            width: 300px;
+        }
+        .btn-primary:hover {
+            background: #337ab7;
+            color:white;
+        }
+        input {
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 4px;
+        }
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 8px;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+            width: 70%;
+        }
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+        .input-header {
+            padding-bottom: 8px;
+            margin-bottom: 0px;
+            font-size: medium;
+            font-weight: bold;
+        }
+        @media (min-width: 320px) and (max-width: 480px) {
+            #stamp-calculator-inputs {
+                width:100%;
+                margin-bottom: 50px;
+            }
+            #stamp-calculator-outputs {
+                width:100%;
+                margin-bottom: 50px;
+            }
+            body {
+                text-align: center;
+                background-color: red;
+            }
+        }
+        @media (min-width: 481px) and (max-width: 1024px) {
+            .header-stamp-calculations {
+                font-size: 75px;
+                margin: 0px;
+                padding: 50px;
+                background-color: #99bbff;
+            }
+            .input-header {
+                font-size: 35px !important;
+                padding-bottom: 16px;
+            }
+            .stamp-header {
+                font-size: 45px !important;
+            }
+            #stamp-calculator-inputs {
+                width: 100%;
+                margin-bottom: 250px;
+            }
+            #stamp-calculator-outputs {
+                width:100%;
+                margin-bottom: 250px;
+            }
+            #total-td {
+                font-size: 40px;
+            }
+            th {
+                font-size: 40px;
+            }
+            td {
+                font-size: xx-large;
+            }
+            input {
+                border: 2px solid black !important;
+            }
+            table {
+                margin: 25px;
+                width: 95% !important;
+            }
+            body {
+                font-size: xx-large;
+                text-align: center;
+            }
+        }
+        @media (min-width: 1025px) {
+            #stamp-calculator-inputs {
+                width: 50%;
+                float: left;
+            }
+            #stamp-calculator-outputs {
+                width: 45%;
+                float: right;
+            }
+            body {
+                padding: 45px;
+            }
         }
     </style>
     <script>
@@ -36,6 +141,7 @@
                 let removeStampBtn = document.createElement("button");
                 removeStampBtn.innerText = "Remove Stamp";
                 removeStampBtn.id = `stamp-remove${stampFields}`;
+                removeStampBtn.className = "btn-primary";
                 removeStampBtn.style.marginLeft = "8px";
                 removeStampBtn.onclick = function() {
                     stampFieldsDiv.removeChild(newStamp);
@@ -54,8 +160,9 @@
             // add calculations to right side of page
             function addCalculations(results) {
                 stampCalculationsField.innerHTML = "";
-                let header = document.createElement("h3");
+                let header = document.createElement("h2");
                 header.innerText = "Stamp Calculations:";
+                header.className = "header-stamp-calculations";
                 stampCalculationsField.appendChild(header);
                 let postedResults = [];
 
@@ -63,10 +170,15 @@
                     if (postedResults.includes(`${results[i].size}-${results[i].price}-${results[i].overage}`)) {
                         continue;
                     }
-                    postedResults.push(`${results[i].size}-${results[i].price}-${results[i].overage}`)
+                    postedResults.push(`${results[i].size}-${results[i].price}-${results[i].overage}`);
 
                     let stampHeader = document.createElement("h3");
-                    stampHeader.innerText = `Using ${results[i].size.toString()} Stamp(s)`;
+                    stampHeader.className = "stamp-header";
+                    if (results[i].stamps.length === 1) {
+                        stampHeader.innerText = `Using ${results[i].size.toString()} Stamp`;
+                    } else {
+                        stampHeader.innerText = `Using ${results[i].size.toString()} Stamps`;
+                    }
                     let lineBr = document.createElement("br");
                     if (i !== 0) {
                         if (results[i].size > results[i-1].size) {
@@ -78,12 +190,53 @@
                         stampCalculationsField.appendChild(stampHeader);
                     }
 
+                    let newStampsTable = document.createElement("table");
+                    let newStampsTableHeadTR = document.createElement("tr");
+                    let newStampsTableHeadTHStamp = document.createElement("th");
+                    let newStampsTableHeadTHPrice = document.createElement("th");
+
+                    newStampsTableHeadTHStamp.innerHTML = "Stamp";
+                    newStampsTableHeadTHPrice.innerHTML = "Price";
+
+                    newStampsTableHeadTR.appendChild(newStampsTableHeadTHStamp);
+                    newStampsTableHeadTR.appendChild(newStampsTableHeadTHPrice);
+
+                    newStampsTable.appendChild(newStampsTableHeadTR);
+
                     for (var j = 0; j < results[i].stamps.length; j++) {
-                        let newStamps = document.createElement("h4");
-                        newStamps.innerText = `$${results[i].price.toFixed(2)} - ${results[i].stamps[j].stampName} ($${results[i].stamps[j].stampVal.toFixed(2)})`;
-                        newStamps.style.paddingLeft = "35px";
-                        stampCalculationsField.appendChild(newStamps);
+                        let stampTR = document.createElement("tr");
+                        let stampTDStamp = document.createElement("td");
+                        let stampTDPrice = document.createElement("td");
+
+                        stampTDStamp.innerHTML = results[i].stamps[j].stampName;
+                        stampTDPrice.innerHTML = `$${results[i].stamps[j].stampVal.toFixed(2)}`;
+
+                        stampTR.appendChild(stampTDStamp);
+                        stampTR.appendChild(stampTDPrice);
+
+                        newStampsTable.appendChild(stampTR);
+
+                        // let newStamps = document.createElement("h4");
+                        // newStamps.innerText = `$${results[i].price.toFixed(2)} - ${results[i].stamps[j].stampName} ($${results[i].stamps[j].stampVal.toFixed(2)})`;
+                        // newStamps.style.paddingLeft = "35px";
+                        // stampCalculationsField.appendChild(newStamps);
                     }
+
+                    let stampTR = document.createElement("tr");
+                    let stampTDStamp = document.createElement("td");
+                    let stampTDPrice = document.createElement("td");
+
+                    stampTDStamp.innerHTML = "<b>Total</b>";
+                    stampTDPrice.innerHTML = `$${results[i].price.toFixed(2)}`;
+                    stampTDStamp.id = "total-td";
+
+                    stampTR.appendChild(stampTDStamp);
+                    stampTR.appendChild(stampTDPrice);
+
+                    newStampsTable.appendChild(stampTR);
+
+                    stampCalculationsField.appendChild(newStampsTable);
+                    stampCalculationsField.scrollIntoView();
                 }
             }
 
@@ -134,7 +287,6 @@
                 if (maxPrice < 0) {
                     return 0;
                 }
-
                 if (goalPrice <= 0) {
                     overage = -goalPrice
                     let price = 0;
@@ -145,7 +297,6 @@
                     found.push({"size":newTrace.length, "price":price, overage: overage, stamps:newTrace});
                     return
                 }
-
                 // if no max stamps number was provided
                 if (maxStamps <= 0) {
                     return 0;
@@ -168,11 +319,13 @@
             }
         });
     </script>
-    <body style="padding:45px;">
-        <div style="width:50%;float:left;">
-            <h3>Stamp Calculator</h3>
+    <body>
+        <div id="stamp-calculator-inputs">
+            <div>
+                <h2 class="header-stamp-calculations">Stamp Calculator</h2>
+            </div>
             <br/>
-            <h4 class="input-header">Price You Want Your Stamps to Add Up To:</h4>
+            <h4 class="input-header">Price of the Stamps Should Add Up To:</h4>
             <div>
                 <input placeholder="1.40" type="text" id="international-stamp" />
             </div>
@@ -191,19 +344,18 @@
             <span style="font-size: large;" class="input-header">Stamps:</span>
             <br/>
             <input placeholder="0.44 Postcard" type="text" id="stamp-field1" />
-            <button id="btn-add-stamp">Add Another Stamp</button>
+            <button class="btn-primary" id="btn-add-stamp">Add Stamp</button>
             <br/><br/>
             <div id="stamp-fields">
             </div>
 
             <br/><br/>
-            <br/><br/>
-            <button id="btn-calc">Calculate</button>
+            <button class="btn-primary" id="btn-calc">Calculate</button>
         </div>
-        <div style="width:45%;float:right;">
+        <div id="stamp-calculator-outputs">
             <div id="stamp-calculations">
+                <h2 class="header-stamp-calculations">Stamp Calculations:</h2>
             </div>
         </div>
-        
     </body>
 </html>
