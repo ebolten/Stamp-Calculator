@@ -205,10 +205,10 @@
                 let postedResults = [];
 
                 for (var i = 0; i < results.length; i++) {
-                    if (postedResults.includes(`${results[i].size}-${results[i].price}-${results[i].overage}`)) {
+                    if (postedResults.includes(`${results[i].size}-${results[i].price}-${results[i].overage.toFixed(5)}`)) {
                         continue;
                     }
-                    postedResults.push(`${results[i].size}-${results[i].price}-${results[i].overage}`);
+                    postedResults.push(`${results[i].size}-${results[i].price}-${results[i].overage.toFixed(5)}`);
 
                     let stampHeader = document.createElement("h3");
                     stampHeader.className = "stamp-header";
