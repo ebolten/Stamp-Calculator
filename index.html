@@ -161,16 +161,11 @@
         let userDefinedStamps = {};
         if (document.cookie) {
             let cookieStamps = document.cookie.split("; ");
-            // let cookieStamps = ['stamp-field1=.44 Postcard', 'stamp-field2=.6 Forever USA', 'stamp-field3=.84 Additional Ounce', 'international-stamp=1.4', 'no-price-exceed=1.5', 'max-stamps=6'];
             for (var i = 0; i < cookieStamps.length; i++) {
                 let cookieStamp = cookieStamps[i].split("=");
                 userDefinedStamps[cookieStamp[0]] = cookieStamp[1];
             }
-            console.log(cookieStamps);
         }
-        console.log(userDefinedStamps)
-        console.log('this is document.cookie')
-        console.log(document.cookie)
 
         // update stamp and set cookie
         const updateStamp = (stampID, e) => {
