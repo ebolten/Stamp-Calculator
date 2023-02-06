@@ -160,6 +160,7 @@
     <script>
         let userDefinedStamps = {};
         if (document.cookie) {
+            console.log(document.cookie)
             let cookieStamps = document.cookie.split("; ");
             for (var i = 0; i < cookieStamps.length; i++) {
                 let cookieStamp = cookieStamps[i].split("=");
@@ -171,14 +172,20 @@
         const updateStamp = (stampID, e) => {
             userDefinedStamps[stampID] = e.target.value;
             setCookie(stampID, e.target.value, 365);
+
+            console.log(document.cookie)
         }
 
         // set cookie
-        function setCookie(cname, cvalue, exdays) {
+        const setCookie = (cname, cvalue, exdays) => {
             const d = new Date();
             d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
             let expires = "expires="+d.toUTCString();
             document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        const deleteCookie = (cname) => {
+            document.cookie = cname + '=; Max-Age=0'
         }
 
         // get cookie
@@ -267,6 +274,8 @@
                     stampFieldsDiv.removeChild(removeStampBtn);
                     stampFieldsDiv.removeChild(lineBr);
                     stampFieldsDiv.removeChild(secondLineBr);
+
+                    deleteCookie(`stamp-field${stampFields}`);
                 }
 
                 // append new fields
@@ -447,7 +456,7 @@
             <br/>
             <h4 class="input-header">Do Not Exceed the Price of:</h4>
             <div>
-                <input placeholder="1.60" type="text" id="no-price-exceed" />
+                <input placeholder="1.55" type="text" id="no-price-exceed" />
             </div>
             <br/>
             <h4 class="input-header">Max Number of Stamps You Want to Use:</h4>
