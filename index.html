@@ -171,8 +171,6 @@
         const updateStamp = (stampID, e) => {
             userDefinedStamps[stampID] = e.target.value;
             setCookie(stampID, e.target.value, 365);
-
-            console.log(document.cookie)
         }
 
         // set cookie
@@ -184,10 +182,7 @@
         }
 
         const deleteCookie = (cname) => {
-            console.log('deleting cookie...')
-            console.log(cname);
             document.cookie = cname + '=; Max-Age=0'
-            console.log(document.cookie)
         }
 
         // get cookie
@@ -244,6 +239,8 @@
                         stampFieldsDiv.removeChild(removeStampBtn);
                         stampFieldsDiv.removeChild(lineBr);
                         stampFieldsDiv.removeChild(secondLineBr);
+                        
+                        deleteCookie(`stamp-field${stampFields}`);
                     }
 
                     // append new fields
