@@ -240,7 +240,7 @@
                         stampFieldsDiv.removeChild(lineBr);
                         stampFieldsDiv.removeChild(secondLineBr);
                         
-                        deleteCookie(`stamp-field${stampFields}`);
+                        deleteCookie(`stamp-field${stamp.split('field')[1]}`);
                     }
 
                     // append new fields
