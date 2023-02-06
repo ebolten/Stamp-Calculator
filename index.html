@@ -159,9 +159,10 @@
     </style>
     <script>
         let userDefinedStamps = {};
-        // if (document.cookie) {
-        //     userDefinedStamps = document.cookie;
-        // }
+        if (document.cookie) {
+            let cookieStamps = document.cookie.split(" ");
+            console.log(cookieStamps);
+        }
         console.log(userDefinedStamps)
         console.log('this is document.cookie')
         console.log(document.cookie)
