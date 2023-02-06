@@ -160,6 +160,7 @@
     <script>
         let userDefinedStamps = {};
         if (document.cookie) {
+            console.log(document.cookie)
             let cookieStamps = document.cookie.split("; ");
             for (var i = 0; i < cookieStamps.length; i++) {
                 let cookieStamp = cookieStamps[i].split("=");
@@ -171,6 +172,8 @@
         const updateStamp = (stampID, e) => {
             userDefinedStamps[stampID] = e.target.value;
             setCookie(stampID, e.target.value, 365);
+
+            console.log(document.cookie)
         }
 
         // set cookie
@@ -205,7 +208,7 @@
             let maxStamps = document.getElementById("max-stamps"); // max number of stamps field
             let stampCalculationsField = document.getElementById("stamp-calculations"); // div that holds stamp calculations
 
-            document.getElementById("stamp-field1").onchange = (e) => updateStamp(`stamp-field${stampFields}`, e);
+            document.getElementById("stamp-field1").onchange = (e) => updateStamp(`stamp-field1`, e);
             if (userDefinedStamps) {
                 for (const stamp in userDefinedStamps) {
                     if (stamp === "stamp-field1") {
