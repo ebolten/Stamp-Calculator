@@ -160,7 +160,6 @@
     <script>
         let userDefinedStamps = {};
         if (document.cookie) {
-            console.log(document.cookie)
             let cookieStamps = document.cookie.split("; ");
             for (var i = 0; i < cookieStamps.length; i++) {
                 let cookieStamp = cookieStamps[i].split("=");
@@ -185,7 +184,10 @@
         }
 
         const deleteCookie = (cname) => {
+            console.log('deleting cookie...')
+            console.log(cname);
             document.cookie = cname + '=; Max-Age=0'
+            console.log(document.cookie)
         }
 
         // get cookie
