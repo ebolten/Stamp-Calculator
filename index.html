@@ -160,7 +160,6 @@
     <script>
         let userDefinedStamps = {};
         if (document.cookie) {
-            console.log(document.cookie)
             let cookieStamps = document.cookie.split("; ");
             for (var i = 0; i < cookieStamps.length; i++) {
                 let cookieStamp = cookieStamps[i].split("=");
@@ -172,8 +171,6 @@
         const updateStamp = (stampID, e) => {
             userDefinedStamps[stampID] = e.target.value;
             setCookie(stampID, e.target.value, 365);
-
-            console.log(document.cookie)
         }
 
         // set cookie
