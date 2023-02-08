@@ -54,54 +54,38 @@
             color: black;
             font-weight: 700
         }
-
-
-
-
-
-        /* The Modal (background) */
         .modal {
-        display: none; /* Hidden by default */
-        position: fixed; /* Stay in place */
-        z-index: 1; /* Sit on top */
+        display: none;
+        position: fixed;
+        z-index: 1;
         left: 0;
         top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgb(0,0,0); /* Fallback color */
-        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0,0,0);
+        background-color: rgba(0,0,0,0.4);
         }
-
-        /* Modal Content/Box */
         .modal-content {
         background-color: #fefefe;
-        margin: 15% auto; /* 15% from the top and centered */
+        margin: 15% auto;
         padding: 20px;
         border: 1px solid #888;
-        width: 80%; /* Could be more or less, depending on screen size */
+        width: 80%;
         }
-
-        /* The Close Button */
         #close-modal-use {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
         }
 
         #close-modal-use:hover,
         #close-modal-use:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
-
-
-
-
-
-       
         /* mobile screens */
         @media (min-width: 320px) and (max-width: 1024px) {
             .header-stamp-calculations {
@@ -375,6 +359,7 @@
                 header.className = "header-stamp-calculations";
                 stampCalculationsField.appendChild(header);
                 let postedResults = [];
+                let selectedCurrency = document.getElementById("selected-currency").value;
 
                 for (var i = 0; i < results.length; i++) {
                     if (postedResults.includes(`${results[i].size}-${results[i].price}-${results[i].overage.toFixed(5)}`)) {
@@ -419,7 +404,7 @@
                         let stampTDPrice = document.createElement("td");
 
                         stampTDStamp.innerHTML = results[i].stamps[j].stampName;
-                        stampTDPrice.innerHTML = `$${results[i].stamps[j].stampVal.toFixed(2)}`;
+                        stampTDPrice.innerHTML = `${selectedCurrency}${results[i].stamps[j].stampVal.toFixed(2)}`;
 
                         stampTR.appendChild(stampTDStamp);
                         stampTR.appendChild(stampTDPrice);
@@ -432,7 +417,7 @@
                     let stampTDPrice = document.createElement("td");
 
                     stampTDStamp.innerHTML = "<b>Total</b>";
-                    stampTDPrice.innerHTML = `$${results[i].price.toFixed(2)}`;
+                    stampTDPrice.innerHTML = `${selectedCurrency}${results[i].price.toFixed(2)}`;
                     stampTDStamp.id = "total-td";
 
                     stampTR.appendChild(stampTDStamp);
@@ -533,6 +518,22 @@
             <br/>
             <p style="text-align: right; padding-right: 16px">
                 <button id="btn-how-to-use" class="btn-primary">How to Use</button>
+                <select id="selected-currency" style="width: 100px !important" class="btn-primary">
+                    <option value="$">$</option>
+                    <option value="&#8364;">&#8364;</option>
+                    <option value="&#165;">&#165;</option>
+                    <option value="&#163;">&#163;</option>
+                    <option value="&#8355;">&#8355;</option>
+                    <option value="&#82;">&#82;</option>
+                    <option value="&#3647;">&#3647;</option>
+                    <option value="&#107;&#114;">&#107;&#114;</option>
+                    <option value="&#8377;">&#8377;</option>
+                    <option value="&#82;&#112;">&#82;&#112;</option>
+                    <option value="&#8362;">&#8362;</option>
+                    <option value="&#8361;">&#8361;</option>
+                    <option value="&#8372;">&#8372;</option>
+                    <option value="&#1088;&#1091;&#1073;">&#1088;&#1091;&#1073;</option>
+                </select>
             </p>
             <br/>
             <h4 class="input-header">Price of the Stamps Should Add Up To:</h4>
