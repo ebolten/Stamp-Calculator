@@ -158,48 +158,48 @@
         }
     </style>
     <script>
-        let userDefinedStamps = {};
-        if (document.cookie) {
-            let cookieStamps = document.cookie.split("; ");
-            for (var i = 0; i < cookieStamps.length; i++) {
-                let cookieStamp = cookieStamps[i].split("=");
-                userDefinedStamps[cookieStamp[0]] = cookieStamp[1];
-            }
-        }
+        // let userDefinedStamps = {};
+        // if (document.cookie) {
+        //     let cookieStamps = document.cookie.split("; ");
+        //     for (var i = 0; i < cookieStamps.length; i++) {
+        //         let cookieStamp = cookieStamps[i].split("=");
+        //         userDefinedStamps[cookieStamp[0]] = cookieStamp[1];
+        //     }
+        // }
 
         // update stamp and set cookie
-        const updateStamp = (stampID, e) => {
-            userDefinedStamps[stampID] = e.target.value;
-            setCookie(stampID, e.target.value, 365);
-        }
+        // const updateStamp = (stampID, e) => {
+        //     userDefinedStamps[stampID] = e.target.value;
+        //     setCookie(stampID, e.target.value, 365);
+        // }
 
         // set cookie
-        const setCookie = (cname, cvalue, exdays) => {
-            const d = new Date();
-            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-            let expires = "expires="+d.toUTCString();
-            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-        }
+        // const setCookie = (cname, cvalue, exdays) => {
+        //     const d = new Date();
+        //     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        //     let expires = "expires="+d.toUTCString();
+        //     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        // }
 
-        const deleteCookie = (cname) => {
-            document.cookie = cname + '=; Max-Age=0'
-        }
+        // const deleteCookie = (cname) => {
+        //     document.cookie = cname + '=; Max-Age=0'
+        // }
 
         // get cookie
-        function getCookie(cname) {
-            let name = cname + "=";
-            let ca = document.cookie.split(';');
-            for(let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) == ' ') {
-                c = c.substring(1);
-                }
-                if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
-                }
-            }
-            return "";
-        }
+        // function getCookie(cname) {
+        //     let name = cname + "=";
+        //     let ca = document.cookie.split(';');
+        //     for(let i = 0; i < ca.length; i++) {
+        //         let c = ca[i];
+        //         while (c.charAt(0) == ' ') {
+        //         c = c.substring(1);
+        //         }
+        //         if (c.indexOf(name) == 0) {
+        //         return c.substring(name.length, c.length);
+        //         }
+        //     }
+        //     return "";
+        // }
 
         document.addEventListener("DOMContentLoaded", function() {
             let stampFields = 1;
@@ -209,47 +209,47 @@
             let maxStamps = document.getElementById("max-stamps"); // max number of stamps field
             let stampCalculationsField = document.getElementById("stamp-calculations"); // div that holds stamp calculations
 
-            document.getElementById("stamp-field1").onchange = (e) => updateStamp(`stamp-field1`, e);
-            if (userDefinedStamps) {
-                for (const stamp in userDefinedStamps) {
-                    if (stamp === "stamp-field1") {
-                        document.getElementById("stamp-field1").value = userDefinedStamps[stamp];
-                        continue;
-                    }
-                    if (!stamp.includes("stamp-field")) {
-                        document.getElementById(stamp).value = userDefinedStamps[stamp];
-                        continue
-                    }
-                    let newStamp = document.createElement("input");
-                    let lineBr = document.createElement("br");
-                    let secondLineBr = document.createElement("br");
-                    newStamp.type = "text";
-                    stampFields += 1;
-                    newStamp.id = stamp;
-                    newStamp.onchange = (e) => updateStamp(stamp, e);
-                    newStamp.value = userDefinedStamps[stamp];
+            // document.getElementById("stamp-field1").onchange = (e) => updateStamp(`stamp-field1`, e);
+            // if (userDefinedStamps) {
+            //     for (const stamp in userDefinedStamps) {
+            //         if (stamp === "stamp-field1") {
+            //             document.getElementById("stamp-field1").value = userDefinedStamps[stamp];
+            //             continue;
+            //         }
+            //         if (!stamp.includes("stamp-field")) {
+            //             document.getElementById(stamp).value = userDefinedStamps[stamp];
+            //             continue
+            //         }
+            //         let newStamp = document.createElement("input");
+            //         let lineBr = document.createElement("br");
+            //         let secondLineBr = document.createElement("br");
+            //         newStamp.type = "text";
+            //         stampFields += 1;
+            //         newStamp.id = stamp;
+            //         newStamp.onchange = (e) => updateStamp(stamp, e);
+            //         newStamp.value = userDefinedStamps[stamp];
 
-                    let removeStampBtn = document.createElement("button");
-                    removeStampBtn.innerText = "Remove Stamp";
-                    removeStampBtn.id = `stamp-remove${stamp.split('field')[1]}`;
-                    removeStampBtn.className = "btn-primary";
-                    removeStampBtn.style.marginLeft = "8px";
-                    removeStampBtn.onclick = function() {
-                        stampFieldsDiv.removeChild(newStamp);
-                        stampFieldsDiv.removeChild(removeStampBtn);
-                        stampFieldsDiv.removeChild(lineBr);
-                        stampFieldsDiv.removeChild(secondLineBr);
+            //         let removeStampBtn = document.createElement("button");
+            //         removeStampBtn.innerText = "Remove Stamp";
+            //         removeStampBtn.id = `stamp-remove${stamp.split('field')[1]}`;
+            //         removeStampBtn.className = "btn-primary";
+            //         removeStampBtn.style.marginLeft = "8px";
+            //         removeStampBtn.onclick = function() {
+            //             stampFieldsDiv.removeChild(newStamp);
+            //             stampFieldsDiv.removeChild(removeStampBtn);
+            //             stampFieldsDiv.removeChild(lineBr);
+            //             stampFieldsDiv.removeChild(secondLineBr);
                         
-                        deleteCookie(`stamp-field${stamp.split('field')[1]}`);
-                    }
+            //             deleteCookie(`stamp-field${stamp.split('field')[1]}`);
+            //         }
 
-                    // append new fields
-                    stampFieldsDiv.appendChild(newStamp);
-                    stampFieldsDiv.appendChild(removeStampBtn);
-                    stampFieldsDiv.appendChild(lineBr);
-                    stampFieldsDiv.appendChild(secondLineBr);
-                }
-            }
+            //         // append new fields
+            //         stampFieldsDiv.appendChild(newStamp);
+            //         stampFieldsDiv.appendChild(removeStampBtn);
+            //         stampFieldsDiv.appendChild(lineBr);
+            //         stampFieldsDiv.appendChild(secondLineBr);
+            //     }
+            // }
 
             // add stamp button
             let btnAddStamp = document.getElementById("btn-add-stamp");
@@ -260,8 +260,8 @@
                 newStamp.type = "text";
                 stampFields += 1;
                 newStamp.id = `stamp-field${stampFields}`;
-                userDefinedStamps[`stamp-field${stampFields}`] = "";
-                newStamp.onchange = (e) => updateStamp(`stamp-field${stampFields}`, e);
+                // userDefinedStamps[`stamp-field${stampFields}`] = "";
+                // newStamp.onchange = (e) => updateStamp(`stamp-field${stampFields}`, e);
 
                 let removeStampBtn = document.createElement("button");
                 removeStampBtn.innerText = "Remove Stamp";
@@ -274,7 +274,7 @@
                     stampFieldsDiv.removeChild(lineBr);
                     stampFieldsDiv.removeChild(secondLineBr);
 
-                    deleteCookie(`stamp-field${stampFields}`);
+                    // deleteCookie(`stamp-field${stampFields}`);
                 }
 
                 // append new fields
@@ -382,9 +382,9 @@
                 }
 
                 let results = computeVals([], [], stamps, internationalStampNum, noPriceExceedNum, maxStampsNum);
-                setCookie("international-stamp", internationalStampNum.toString(), 365);
-                setCookie("no-price-exceed", noPriceExceedNum.toString(), 365);
-                setCookie("max-stamps", maxStampsNum.toString(), 365);
+                // setCookie("international-stamp", internationalStampNum.toString(), 365);
+                // setCookie("no-price-exceed", noPriceExceedNum.toString(), 365);
+                // setCookie("max-stamps", maxStampsNum.toString(), 365);
                 let sortedResults = sortArr(results, results.length);
                 addCalculations(sortedResults);
             }
@@ -455,7 +455,7 @@
             <br/>
             <h4 class="input-header">Do Not Exceed the Price of:</h4>
             <div>
-                <input placeholder="1.55" type="text" id="no-price-exceed" />
+                <input placeholder="1.60" type="text" id="no-price-exceed" />
             </div>
             <br/>
             <h4 class="input-header">Max Number of Stamps You Want to Use:</h4>
