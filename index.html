@@ -404,7 +404,11 @@
                         let stampTDPrice = document.createElement("td");
 
                         stampTDStamp.innerHTML = results[i].stamps[j].stampName;
+                        if (selectedCurrency !== "£") {
                         stampTDPrice.innerHTML = `${selectedCurrency}${results[i].stamps[j].stampVal.toFixed(2)}`;
+                        } else {
+                            stampTDPrice.innerHTML = `${selectedCurrency}${results[i].stamps[j].stampVal.toFixed(3)}`;
+                        }
 
                         stampTR.appendChild(stampTDStamp);
                         stampTR.appendChild(stampTDPrice);
@@ -417,7 +421,11 @@
                     let stampTDPrice = document.createElement("td");
 
                     stampTDStamp.innerHTML = "<b>Total</b>";
-                    stampTDPrice.innerHTML = `${selectedCurrency}${results[i].price.toFixed(2)}`;
+                    if (selectedCurrency !== "£") {
+                        stampTDPrice.innerHTML = `${selectedCurrency}${results[i].price.toFixed(2)}`;
+                    } else {
+                        stampTDPrice.innerHTML = `${selectedCurrency}${results[i].price.toFixed(3)}`;
+                    }
                     stampTDStamp.id = "total-td";
 
                     stampTR.appendChild(stampTDStamp);
@@ -522,7 +530,11 @@
                     <option value="$">$</option>
                     <option value="&#8364;">&#8364;</option>
                     <option value="&#165;">&#165;</option>
+
+
                     <option value="&#163;">&#163;</option>
+
+
                     <option value="&#8355;">&#8355;</option>
                     <option value="&#82;">&#82;</option>
                     <option value="&#122;&#322;">&#122;&#322;</option>
