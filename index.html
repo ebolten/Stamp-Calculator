@@ -250,6 +250,16 @@
         //     return "";
         // }
 
+        const checkDuplicate = (results, newStamps) => {
+            let resultsArr = results[results.length-1].split("-");
+            for (var i = 0; i < newStamps.length; i++) {
+                if (!resultsArr.includes(newStamps[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             // define all text input fields
             let stampFields = 1;
@@ -358,14 +368,41 @@
                 header.innerText = "Stamp Calculations:";
                 header.className = "header-stamp-calculations";
                 stampCalculationsField.appendChild(header);
-                let postedResults = [];
+                let postedResults = {};
                 let selectedCurrency = document.getElementById("selected-currency").value;
 
+                // go through all results in array
                 for (var i = 0; i < results.length; i++) {
-                    if (postedResults.includes(`${results[i].size}-${results[i].price}-${results[i].overage.toFixed(5)}`)) {
-                        continue;
+                    let stampNames = [];
+                    for (var stampIndex = 0; stampIndex < results[i]["stamps"].length; stampIndex++) {
+                        stampNames.push(results[i]["stamps"][stampIndex]["stampName"]);
                     }
-                    postedResults.push(`${results[i].size}-${results[i].price}-${results[i].overage.toFixed(5)}`);
+                    stampNames.sort(function(a, b) {
+                        return b.length - a.length;
+                    });
+
+                    // check postedResults for duplicates
+                    if (postedResults[results[i].size] && postedResults[results[i].size][results[i].price.toFixed(2)]) {
+
+                        // if duplicate was found, move onto next result
+                        if (checkDuplicate(postedResults[results[i].size][results[i].price.toFixed(2)], stampNames)) {
+                            continue;
+                        }
+                    }
+
+                    // add result to postedResults to prevent it from being shown again
+                    if (postedResults[results[i].size]) {
+                        if (postedResults[results[i].size][results[i].price.toFixed(2)]) {
+                            let newResults = [...postedResults[results[i].size][results[i].price.toFixed(2)],stampNames.join("-")];
+                            postedResults[results[i].size][results[i].price.toFixed(2)] = newResults;
+                        } else {
+                            postedResults[results[i].size][results[i].price.toFixed(2)] = [stampNames.join("-")];
+                        }
+                    } else {
+                        postedResults[results[i].size] = {
+                            [results[i].price.toFixed(2)]: [stampNames.join("-")]
+                        };
+                    }
 
                     let stampHeader = document.createElement("h3");
                     stampHeader.className = "stamp-header";
